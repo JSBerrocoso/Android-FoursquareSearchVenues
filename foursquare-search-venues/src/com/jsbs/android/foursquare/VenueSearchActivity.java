@@ -6,7 +6,8 @@ import android.widget.Toast;
 
 
 /***
- * Activity showing an EditText to get a place through the Foursquare API. 
+ * Activity showing an EditText to get a place through the
+ * <a href="https://developer.foursquare.com/start/search">Foursquare API</a>.<br>
  *  Parameters for entry into the intent:<p>
  * 
  * <b>EXTRA_LATITUDE<br>
@@ -48,7 +49,11 @@ public class VenueSearchActivity extends Activity{
      */
     private void setupDataByFoursquare( String lat, String lng, String query){
         
-        
+        /**
+         * NOTE : 
+         * https://github.com/ddewaele/AndroidFoursquareGoogleApiJavaClient/blob/master/src/com/ecs/android/foursquare/FoursquareVenueList.java
+         * http://stackoverflow.com/questions/16315854/how-to-get-foursquare-venues-list-android
+         */
         
     }
 
