@@ -48,8 +48,7 @@ public class MainActivity extends Activity{
             textViewPlace.setEnabled( true);
         } else {
             textViewPlace.setEnabled( false);
-        }
-        
+        }  
     }
     
     @Override
