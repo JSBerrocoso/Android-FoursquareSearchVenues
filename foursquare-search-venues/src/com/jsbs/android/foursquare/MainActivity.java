@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity{
     
+    public static final String CLIENT_ID        = "WEAKP5QWQQ1LBVW2MHK1Q2S5YTGTCKE1XTAJZYCIVXNUH0EY";
+    public static final String CLIENT_SECRET    = "KSDVIV21N3UPJ4N2B1M3XUDNTJIHDCZLR3QCKGO5A0KLASCL";
+
+    
     private TextView textViewPlace;
     protected String lat = "40.2219766";
     protected String lng = "-5.751487";

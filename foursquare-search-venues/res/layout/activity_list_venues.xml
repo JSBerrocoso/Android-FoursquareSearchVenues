@@ -8,14 +8,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".VenueSearchActivity" >
 
-    <EditText
-        android:id="@+id/editTextPlace"
+    <AutoCompleteTextView
+        android:id="@+id/editTextVenue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
         android:ems="10"
-        android:hint="Search place" />
+        android:hint="Search place"
+        android:imeOptions="actionSearch" />
+
+    <ListView android:id="@+id/venueList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/editTextPlace"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:paddingTop="?android:attr/actionBarSize" >
+
+        <!--
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        -->
+    </ListView>
 
 </RelativeLayout>
