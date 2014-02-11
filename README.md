@@ -9,5 +9,5 @@ Dependency
 ==========
 
 ##### Jars
- * [androidasync.jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.koushikdutta.async&a=androidasync&v=LATEST) (dependency)
+ * [androidasync.jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.koushikdutta.async&a=androidasync&v=LATEST)
  * [ion.jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.koushikdutta.ion&a=ion&v=LATEST)
