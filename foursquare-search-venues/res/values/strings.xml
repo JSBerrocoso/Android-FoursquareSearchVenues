@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     
-    <string name="error_to_get_extra_data">Error when get data from the intent</string>
+    <string name="error_to_get_extra_data">Error when get data from the intent: CLIENT_ID and CLIENT_SECRET not found</string>
     <string name="error_to_get_extra_data_client_foursquare">Error: CLIENT_ID or CLIENT_SECRET not found</string>
 
 </resources>

@@ -3,8 +3,11 @@ package com.jsbs.android.foursquare;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,29 +22,58 @@ public class MainActivity extends Activity{
     protected String lng = "-5.751487";
     protected String query;
     private EditText editTextPlace;
+    private Button button;
     
     @Override
     protected void onCreate( Bundle savedInstanceState){
         super.onCreate( savedInstanceState);
         setContentView( R.layout.activity_main);
         
-        editTextPlace = ( EditText) findViewById( R.id.editTextPlace);
+        editTextPlace = ( EditText) findViewById( R.id.editTextPlace);        
+        editTextPlace.addTextChangedListener(new TextWatcher( ){
+            
+            @Override
+            public void onTextChanged( CharSequence s, int start, int before, int count){
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public void beforeTextChanged( CharSequence s, int start, int count, int after){
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public void afterTextChanged( Editable s){
+                if( !editTextPlace.getText( ).toString( ).equals( "")) {
+                    button.setEnabled( true);
+                } else {
+                    button.setEnabled( false);
+                } 
+            }
+        });
+   
         
-        textViewPlace = ( TextView) findViewById( R.id.textViewPlace);
-        textViewPlace.setOnClickListener( new OnClickListener( ){
+        button = ( Button) findViewById( R.id.button);
+        button.setOnClickListener( new OnClickListener( ){
             
             @Override
             public void onClick( View v){
                 
                 Intent i = new Intent( MainActivity.this, VenueSearchActivity.class);
+                i.putExtra( VenueSearchActivity.EXTRA_CLIENT_ID, CLIENT_ID);
+                i.putExtra( VenueSearchActivity.EXTRA_CLIENT_SECRET, CLIENT_SECRET);
                 i.putExtra( VenueSearchActivity.EXTRA_LATITUDE, lat);
                 i.putExtra( VenueSearchActivity.EXTRA_LONGITUDE, lng);
-                i.putExtra( VenueSearchActivity.EXTRA_QUERY, query);
+                if( editTextPlace.getText( ).toString( ).trim( ) != null && !editTextPlace.getText( ).toString( ).trim( ).equals( "")) {
+                    i.putExtra( VenueSearchActivity.EXTRA_QUERY, query);
+                }
                 
                 startActivityForResult( i, VenueSearchActivity.REQUEST_CODE_FOURSQUARE_VENUE_SEARCH);
             }
         });
-        
+       
     }
     
     @Override
@@ -49,9 +81,9 @@ public class MainActivity extends Activity{
         super.onResume( );
         
         if( !editTextPlace.getText( ).toString( ).equals( "")) {
-            textViewPlace.setEnabled( true);
+            button.setEnabled( true);
         } else {
-            textViewPlace.setEnabled( false);
+            button.setEnabled( false);
         }  
     }
     
@@ -60,6 +92,12 @@ public class MainActivity extends Activity{
         super.onActivityResult( requestCode, resultCode, data);
         
         if( requestCode == VenueSearchActivity.REQUEST_CODE_FOURSQUARE_VENUE_SEARCH) {
+            if( data != null) {
+                String venue = data.getExtras( ).getString( VenueSearchActivity.EXTRA_VENUE);
+                if( venue != null && !venue.equals( "")) {
+                    textViewPlace.setText( venue);
+                }
+            }
             
         }
         
