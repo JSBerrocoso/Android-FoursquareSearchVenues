@@ -1,7 +1,5 @@
 package com.jsbs.android.foursquare;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,11 +48,11 @@ public class VenueSearchActivity extends Activity{
     //https://api.foursquare.com/v2/venues/search?client_id=CLIENT_ID&client_secret=CLIENT_SECRET &v=20130815&ll=40.7,-74&query=sushi
     
     private static String URL_VENUE_SEARCH                           = "https://api.foursquare.com/v2/venues/search";
-    private static final String PARAM_CLIENT_ID                      = "?" + EXTRA_CLIENT_ID;
-    private static final String PARAM_CLIENT_SECRET                  = "&" + EXTRA_CLIENT_SECRET;
-    private static final String PARAM_VERSION                        = "&v";
-    private static final String PARAM_LAT_LNG                        = "&ll";
-    private static final String PARAM_QUERY                          = "&query";
+    private static final String PARAM_CLIENT_ID                      = "?" + EXTRA_CLIENT_ID+"=";
+    private static final String PARAM_CLIENT_SECRET                  = "&" + EXTRA_CLIENT_SECRET+"=";
+    private static final String PARAM_VERSION                        = "&v=";
+    private static final String PARAM_LAT_LNG                        = "&ll=";
+    private static final String PARAM_QUERY                          = "&query=";
     private static final String TAG = null;
     
     private EditText            editTextVenue;
@@ -64,6 +62,7 @@ public class VenueSearchActivity extends Activity{
     String clientSecret;
     private String lat;
     private String lng;
+    private String query;
     
     @Override
     protected void onCreate( Bundle savedInstanceState){
@@ -74,7 +73,7 @@ public class VenueSearchActivity extends Activity{
         
         lat      = getIntent( ).getExtras( ).getString( EXTRA_LATITUDE);
         lng      = getIntent( ).getExtras( ).getString( EXTRA_LONGITUDE);
-        String query    = getIntent( ).getExtras( ).getString( EXTRA_QUERY);
+        query    = getIntent( ).getExtras( ).getString( EXTRA_QUERY);
         
         clientId        = getIntent( ).getExtras( ).getString( EXTRA_CLIENT_ID);
         clientSecret    = getIntent( ).getExtras( ).getString( EXTRA_CLIENT_SECRET);
@@ -155,7 +154,7 @@ public class VenueSearchActivity extends Activity{
             
             @Override
             public void afterTextChanged( Editable s){
-               
+                searchVenue( editTextVenue.getText( ).toString( ), lat, lng);    
             }
         });
         editTextVenue.setOnEditorActionListener( new OnEditorActionListener( ){
@@ -163,7 +162,7 @@ public class VenueSearchActivity extends Activity{
             @Override
             public boolean onEditorAction( TextView v, int actionId, KeyEvent event){
                 
-                searchVenue( editTextVenue.getText( ).toString( ), lat, lng);              
+                searchVenue( v.getText( ).toString( ), lat, lng);              
                 return false;
             }
         });
@@ -175,19 +174,7 @@ public class VenueSearchActivity extends Activity{
      * Realiza una busqueda a traves de Foursquare.
      */
     protected void searchVenue( String textToSearch, String lat, String lng){
-        
-        /**
-         * NOTE :
-         * https://github.com/ddewaele/AndroidFoursquareGoogleApiJavaClient
-         * /blob/master/src/com/ecs/android/foursquare/FoursquareVenueList.java
-         * http ://stackoverflow.com/questions/16315854/how-to-get-foursquare-
-         * venues -list-android
-         * 
-         * URL FORMAT: https://api.foursquare.com/v2/venues/search
-         * ?client_id=CLIENT_ID &client_secret=CLIENT_SECRET &v=20130815
-         * &ll=40.7,-74 &query=sushi
-         */
-        
+
         // sample Date version 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         Calendar cal = Calendar.getInstance();
@@ -198,14 +185,22 @@ public class VenueSearchActivity extends Activity{
         Log.d( TAG, "Search Venue URL: " + url);
         
         try {
-            Ion.with( this, URLEncoder.encode( url.toString( ), "UTF-8")).asJsonObject( ).setCallback( new FutureCallback< JsonObject>( ){
+            //URLEncoder.encode( url.toString( )
+            Ion.with( this, url)
+            .asJsonObject( ).setCallback( new FutureCallback< JsonObject>( ){
                 @Override
                 public void onCompleted( Exception e, JsonObject result){
+                    if(e!=null) {
+                        Log.d( TAG, "EXCEPTION: " + e.getMessage( ));
+                        return;
+                    }else if(result!=null) {
+                        Log.d( TAG, "RESULT FOURSQUARE JSON: " + result.toString( ));
+                    }
                     
-                    Log.d( TAG, "RESULT FOURSQUARE JSON: " + result.toString( ));
                 }
+                
             });
-        } catch( UnsupportedEncodingException e) {
+        } catch( Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace( );
         }

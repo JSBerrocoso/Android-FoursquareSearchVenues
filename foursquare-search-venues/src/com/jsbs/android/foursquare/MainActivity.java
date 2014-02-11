@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,8 +14,9 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity{
     
-    public static final String CLIENT_ID        = "WEAKP5QWQQ1LBVW2MHK1Q2S5YTGTCKE1XTAJZYCIVXNUH0EY";
-    public static final String CLIENT_SECRET    = "KSDVIV21N3UPJ4N2B1M3XUDNTJIHDCZLR3QCKGO5A0KLASCL";
+    public static final String FOURSQUARE_CLIENT_ID        = "WEAKP5QWQQ1LBVW2MHK1Q2S5YTGTCKE1XTAJZYCIVXNUH0EY"; 
+    public static final String FOURSQUARE_CLIENT_SECRET    = "KSDVIV21N3UPJ4N2B1M3XUDNTJIHDCZLR3QCKGO5A0KLASCL";
+    protected static final String TAG = MainActivity.class.getSimpleName( );
 
     
     private TextView textViewPlace;
@@ -62,11 +64,12 @@ public class MainActivity extends Activity{
             public void onClick( View v){
                 
                 Intent i = new Intent( MainActivity.this, VenueSearchActivity.class);
-                i.putExtra( VenueSearchActivity.EXTRA_CLIENT_ID, CLIENT_ID);
-                i.putExtra( VenueSearchActivity.EXTRA_CLIENT_SECRET, CLIENT_SECRET);
+                i.putExtra( VenueSearchActivity.EXTRA_CLIENT_ID, FOURSQUARE_CLIENT_ID);
+                i.putExtra( VenueSearchActivity.EXTRA_CLIENT_SECRET, FOURSQUARE_CLIENT_SECRET);
                 i.putExtra( VenueSearchActivity.EXTRA_LATITUDE, lat);
                 i.putExtra( VenueSearchActivity.EXTRA_LONGITUDE, lng);
                 if( editTextPlace.getText( ).toString( ).trim( ) != null && !editTextPlace.getText( ).toString( ).trim( ).equals( "")) {
+                    Log.d( TAG, "QUERY: " +editTextPlace.getText( ).toString( ).trim( ));
                     i.putExtra( VenueSearchActivity.EXTRA_QUERY, query);
                 }
                 

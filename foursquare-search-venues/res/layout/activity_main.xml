@@ -43,7 +43,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
         android:hint="Search place"
-        android:ems="10" >
+        android:ems="10" 
+        >
 
         <requestFocus />
     </EditText>
