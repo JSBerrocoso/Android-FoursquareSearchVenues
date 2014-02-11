@@ -4,6 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,7 +20,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -74,7 +77,8 @@ public class VenueSearchActivity extends Activity{
         lat      = getIntent( ).getExtras( ).getString( EXTRA_LATITUDE);
         lng      = getIntent( ).getExtras( ).getString( EXTRA_LONGITUDE);
         query    = getIntent( ).getExtras( ).getString( EXTRA_QUERY);
-        
+        Log.d( TAG, "EXTRA_QUERY: " +query);
+
         clientId        = getIntent( ).getExtras( ).getString( EXTRA_CLIENT_ID);
         clientSecret    = getIntent( ).getExtras( ).getString( EXTRA_CLIENT_SECRET);
         
@@ -96,7 +100,14 @@ public class VenueSearchActivity extends Activity{
         if(editTextVenue == null) {
             editTextVenue = ( EditText) findViewById( R.id.editTextVenue);
         }
-        editTextVenue.setText( query);
+        if(query!=null && !query.equals( "")) {
+            editTextVenue.setText( query);
+            editTextVenue.setTextIsSelectable( true);
+
+            editTextVenue.setFocusable( true);
+            editTextVenue.setFocusableInTouchMode( true);
+
+        }
         editTextVenue.setOnEditorActionListener( new OnEditorActionListener( ){
             
             @Override
@@ -116,8 +127,7 @@ public class VenueSearchActivity extends Activity{
      * @param lng
      * @param query
      */
-    private void setupDataByFoursquare( String lat, String lng, String query){
-     
+    private void setupDataByFoursquare( String lat, String lng, String query){     
         searchVenue( query, lat, lng);
     }
     
@@ -171,32 +181,64 @@ public class VenueSearchActivity extends Activity{
     }
     
     /**
-     * Realiza una busqueda a traves de Foursquare.
+     * Search venue by Foursquare
      */
     protected void searchVenue( String textToSearch, String lat, String lng){
 
+       /**
+        *  NOTE :
+ -         * https://github.com/ddewaele/AndroidFoursquareGoogleApiJavaClient
+ -         * /blob/master/src/com/ecs/android/foursquare/FoursquareVenueList.java
+ -         * http
+ -         * ://stackoverflow.com/questions/16315854/how-to-get-foursquare-venues
+ -         * -list-android
+        */
+        
         // sample Date version 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         Calendar cal = Calendar.getInstance();
         
         String version = dateFormat.format(cal.getTime());
         
-        String url = URL_VENUE_SEARCH + PARAM_CLIENT_ID + clientId + PARAM_CLIENT_SECRET + clientSecret+PARAM_VERSION+version+PARAM_LAT_LNG+lat+","+lng+PARAM_QUERY+textToSearch;
+        String url = URL_VENUE_SEARCH + PARAM_CLIENT_ID + clientId + PARAM_CLIENT_SECRET + clientSecret+PARAM_VERSION+version+PARAM_LAT_LNG+lat+","+lng;
+        
+        if(textToSearch!=null){
+            url = url +PARAM_QUERY+textToSearch;
+        }
+        
         Log.d( TAG, "Search Venue URL: " + url);
         
         try {
             //URLEncoder.encode( url.toString( )
             Ion.with( this, url)
-            .asJsonObject( ).setCallback( new FutureCallback< JsonObject>( ){
+            .asString( ).setCallback( new FutureCallback< String>( ){
                 @Override
-                public void onCompleted( Exception e, JsonObject result){
+                public void onCompleted( Exception e, String result){
                     if(e!=null) {
                         Log.d( TAG, "EXCEPTION: " + e.getMessage( ));
                         return;
                     }else if(result!=null) {
-                        Log.d( TAG, "RESULT FOURSQUARE JSON: " + result.toString( ));
-                    }
-                    
+                        Log.d( TAG, "RESULT FOURSQUARE JSON: " + result);
+                        JSONObject object = null;
+                        try {
+                            object = new JSONObject(result);
+                            JSONObject fourSquareResponse = (JSONObject) object.get("response");
+                            JSONArray venues = (JSONArray) fourSquareResponse.get("venues");
+                            
+                            for( int i = 0; i < venues.length( ); i++) {
+                                JSONObject place = (JSONObject)venues.get(i);
+                                Log.i( TAG, "PLACE: " + place.toString( ));
+                                Log.i( TAG, "==============================================");
+                            }
+                            
+//                            JSONObject place = (JSONObject)venues.get(0);
+//                            Log.i( TAG, "Found venues " + place.toString( ));
+                        } catch( JSONException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                       
+                    }                   
                 }
                 
             });
