@@ -80,10 +80,10 @@ public class VenueSearchActivity extends Activity{
         clientSecret    = getIntent( ).getExtras( ).getString( EXTRA_CLIENT_SECRET);
         
         if( clientId == null || clientId.equals( "") || clientSecret == null || clientSecret.equals( "")) {
-            Toast.makeText( VenueSearchActivity.this, getString( R.string.error_to_get_extra_data), Toast.LENGTH_SHORT).show( );
+            Toast.makeText( VenueSearchActivity.this, getString( R.string.error_to_get_extra_data_client_foursquare), Toast.LENGTH_SHORT).show( );
         } else {
             
-            if( !checkDataIntent( lat, lng)) {
+            if( existDataIntent( lat, lng)) {
                  
                 initDataToComponent( query);
                 setupDataByFoursquare( lat, lng, query);
@@ -129,7 +129,7 @@ public class VenueSearchActivity extends Activity{
      * @param lng
      * @return
      */
-    private boolean checkDataIntent( String lat, String lng){
+    private boolean existDataIntent( String lat, String lng){
         if( lat != null && lng != null) {
             return true;
         } else {
